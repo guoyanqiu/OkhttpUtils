@@ -1,8 +1,7 @@
 # OkhttpUtils
 对Okhttp的简单封装，可以满足基本的get,post.put,delete请求
 
-//使用代码示例
-public class MainActivity extends AppCompatActivity {
+ class MainActivity extends AppCompatActivity {
     //初始化一个ConnectHelper用来处理请求
     private ConnectHelper connectHelper;
 
@@ -72,6 +71,22 @@ public class MainActivity extends AppCompatActivity {
         connectHelper.asyncConnect(request);
     }
 
+    public void postJson() {
+        HttpRequest.Builder builder = new HttpRequest.Builder();
+        builder.setUrl("http://www.baidu.com")
+                .setRequestType(RequestType.POST)
+                .addHeader("xxx", "yyyy")
+                .setJson(new JSONObject().toString())//添加json内容
+                .setCallback(new RequestCallbackImpl() {
+                    @Override
+                    public void requestFinish(HttpRequest request, IResponse response) {
+
+                    }
+                });
+        HttpRequest request = builder.build();
+        connectHelper.asyncConnect(request);
+    }
+
     //put请求代码示例
     public void put() {
         HttpRequest.Builder builder = new HttpRequest.Builder();
@@ -116,29 +131,11 @@ public class MainActivity extends AppCompatActivity {
 
 
     }
-    
-   public void postJson() {
-        HttpRequest.Builder builder = new HttpRequest.Builder();
-        builder.setUrl("http://www.baidu.com")
-                .setRequestType(RequestType.POST)
-                .addHeader("xxx", "yyyy")
-                .setJson(new JSONObject().toString())//添加json内容
-                .setCallback(new RequestCallbackImpl() {
-                    @Override
-                    public void requestFinish(HttpRequest request, IResponse response) {
 
-                    }
-                });
-        HttpRequest request = builder.build();
-        connectHelper.asyncConnect(request);
-    }
-   
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        //销毁请求
-        connectHelper.abortAll()；
-    }
+        connectHelper.abortAll();
+    }
 }
-
