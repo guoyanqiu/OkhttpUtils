@@ -1,4 +1,5 @@
 # OkhttpUtils
+OKhttp 源码分析博客专栏：http://blog.csdn.net/column/details/16213.html
 对Okhttp的简单封装，可以满足基本的get,post.put,delete请求
 
  class MainActivity extends AppCompatActivity {
@@ -104,8 +105,8 @@
         connectHelper.asyncConnect(request);
     }
 
-    //文件双穿
-    public void upload() {
+    //文件上传
+    public void upload() {
 
         //创建一个文件请求的bean
         UploadFileRequest.FileInfo f1 = new UploadFileRequest.FileInfo("name", "fileName", new File("."));
