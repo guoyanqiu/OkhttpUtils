@@ -116,23 +116,29 @@ public class MainActivity extends AppCompatActivity {
 
 
     }
+    
+   public void postJson() {
+        HttpRequest.Builder builder = new HttpRequest.Builder();
+        builder.setUrl("http://www.baidu.com")
+                .setRequestType(RequestType.POST)
+                .addHeader("xxx", "yyyy")
+                .setJson(new JSONObject().toString())//添加json内容
+                .setCallback(new RequestCallbackImpl() {
+                    @Override
+                    public void requestFinish(HttpRequest request, IResponse response) {
 
-    @Override
-    public void onBackPressed() {
-        super.onBackPressed();
-
+                    }
+                });
+        HttpRequest request = builder.build();
+        connectHelper.asyncConnect(request);
     }
-
-    @Override
-    public boolean onKeyDown(int keyCode, KeyEvent event) {
-
-        return super.onKeyDown(keyCode, event);
-    }
+   
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        connectHelper.abortAll();
-    }
+        //销毁请求
+        connectHelper.abortAll()；
+    }
 }
 
