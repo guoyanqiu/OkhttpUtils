@@ -33,8 +33,8 @@ OKhttp 源码分析博客专栏：http://blog.csdn.net/column/details/16213.html
         HttpRequest request = builder.build();
         //异步发送请求
         connectHelper.asyncConnect(request);
-        //同步发送请求
-        connectHelper.syncConnect(request);
+        //同步发送请求:response可能为null
+       IResponse response= connectHelper.syncConnect(request);
 
     }
 
