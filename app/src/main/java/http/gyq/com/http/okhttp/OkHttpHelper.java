@@ -64,17 +64,14 @@ public class OkHttpHelper {
      * @param request
      * @return
      */
-    public IResponse startSyncConnect(okhttp3.Request okRequest, HttpRequest request) {
+    public IResponse startSyncConnect(okhttp3.Request okRequest, HttpRequest request) throws IOException {
         IRequestCallback handler = request.getCallback();
         if (handler != null) {
             handler.startRequest(request);
         }
-        try {
-            Response response = OkhttpClientUtil.getInstance().newCall(okRequest).execute();
-            return new OkResponse(response, request);
-        } catch (Exception e) {
-            return null;
-        }
+        Response response = OkhttpClientUtil.getInstance().newCall(okRequest).execute();
+        return new OkResponse(response, request);
+
 
     }
 

@@ -140,6 +140,13 @@ public class MainActivity extends AppCompatActivity {
                 });
         HttpRequest request = builder.build();
         connectHelper.asyncConnect(request);
+
+        //同步请求
+        try {
+            IResponse response = connectHelper.syncConnect(request);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     public void put() {
@@ -198,17 +205,17 @@ public class MainActivity extends AppCompatActivity {
     protected void onDestroy() {
         super.onDestroy();
         connectHelper.abortAll();
-
-        //创建jsonType
-        MediaType jsonType = MediaType.parse("application/json; charset=utf-8");
-
-        //创建json请求体
-        RequestBody jsonBody = RequestBody.create(jsonType, new JSONObject().toString());
-
-        Request.Builder builder = new Request.Builder();
-
-        //post提交jsonBody
-        builder.post(jsonBody);
+//
+//        //创建jsonType
+//        MediaType jsonType = MediaType.parse("application/json; charset=utf-8");
+//
+//        //创建json请求体
+//        RequestBody jsonBody = RequestBody.create(jsonType, new JSONObject().toString());
+//
+//        Request.Builder builder = new Request.Builder();
+//
+//        //post提交jsonBody
+//        builder.post(jsonBody);
 
     }
 }

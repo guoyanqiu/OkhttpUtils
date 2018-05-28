@@ -36,7 +36,7 @@ public class ConnectHelper implements IHttpConnect {
      * @param request
      * @return
      */
-    public IResponse syncConnect(@NonNull HttpRequest request) {
+    public IResponse syncConnect(@NonNull HttpRequest request) throws Exception {
         //无效的请求
         if (!request.isReuestValidity(request)) {
             return null;
