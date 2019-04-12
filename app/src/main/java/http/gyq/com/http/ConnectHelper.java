@@ -4,9 +4,8 @@ import android.support.annotation.NonNull;
 
 import http.gyq.com.http.interf.IHttpConnect;
 import http.gyq.com.http.interf.IResponse;
-import http.gyq.com.http.okhttp.OkHttpHelper;
 import http.gyq.com.http.okhttp.internal.OkhttpConnect;
-import http.gyq.com.http.request.HttpRequest;
+import http.gyq.com.http.request.Request;
 
 /**
  * Created by Arthur on 2017/8/7.
@@ -15,17 +14,16 @@ import http.gyq.com.http.request.HttpRequest;
 public class ConnectHelper implements IHttpConnect {
     private IHttpConnect httpConnect;
     public ConnectHelper () {
-        OkHttpHelper okHttpHelper = new OkHttpHelper();
-        httpConnect = new OkhttpConnect(okHttpHelper);
+        httpConnect = new OkhttpConnect();
     }
 
     /**
      * 发起异步网络而链接
      * @param request
      */
-    public void asyncConnect(@NonNull HttpRequest request) {
+    public void asyncConnect(@NonNull Request request) {
         //无效的请求
-        if (!request.isReuestValidity(request)) {
+        if (!request.isRequestValidity(request)) {
             return;
         }
         httpConnect.asyncConnect(request);
@@ -36,9 +34,9 @@ public class ConnectHelper implements IHttpConnect {
      * @param request
      * @return
      */
-    public IResponse syncConnect(@NonNull HttpRequest request) throws Exception {
+    public IResponse syncConnect(@NonNull Request request) throws Exception {
         //无效的请求
-        if (!request.isReuestValidity(request)) {
+        if (!request.isRequestValidity(request)) {
             return null;
         }
         return httpConnect.syncConnect(request);
@@ -46,7 +44,7 @@ public class ConnectHelper implements IHttpConnect {
     }
 
     @Override
-    public void abort(HttpRequest request) {
+    public void abort(Request request) {
         httpConnect.abort(request);
     }
 

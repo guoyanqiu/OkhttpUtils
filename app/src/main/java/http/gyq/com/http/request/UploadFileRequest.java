@@ -8,6 +8,7 @@ import java.io.UnsupportedEncodingException;
 import java.net.FileNameMap;
 import java.net.URLConnection;
 import java.net.URLEncoder;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
@@ -16,7 +17,7 @@ import java.util.List;
  * Created by Arthur on 2017/8/8.
  */
 
-public class UploadFileRequest extends HttpRequest {
+public class UploadFileRequest extends Request {
     //form的name
     private List<FileInfo> mFileInfos;
 
@@ -24,40 +25,24 @@ public class UploadFileRequest extends HttpRequest {
         return Collections.unmodifiableList(mFileInfos);
     }
 
-    public UploadFileRequest(@NonNull UploadBuilder builder) {
-        super(builder);
-        this.mFileInfos = builder.mFileInfos;
+
+    public UploadFileRequest(String url) {
+        super(url);
+        this.mFileInfos = new ArrayList<>();
+    }
+
+    public UploadFileRequest addFiles(List<FileInfo> files) {
+        if (files != null && !files.isEmpty()) {
+            mFileInfos.addAll(files);
+        }
+        return this;
     }
 
 
-    public static class UploadBuilder extends Builder {
-        //form的name
-        private List<FileInfo> mFileInfos;
-
-        public UploadBuilder() {
-            mFileInfos = Collections.emptyList();
-            setRequestType(RequestType.POST);
-        }
-
-        public UploadBuilder addFiles(List<FileInfo> files) {
-            if (files != null && !files.isEmpty()) {
-                mFileInfos.addAll(files);
-            }
-
-            return this;
-        }
-
-        public UploadBuilder addFile(@NonNull FileInfo fileInfo) {
-            mFileInfos.add(fileInfo);
-            return this;
-        }
-
-        @Override
-        public HttpRequest build() {
-            return new UploadFileRequest(this);
-        }
+    public UploadFileRequest addFile(@NonNull FileInfo fileInfo) {
+        mFileInfos.add(fileInfo);
+        return this;
     }
-
     public static String getFileContentType(String fileName) {
         FileNameMap fileNameMap = URLConnection.getFileNameMap();
         String contentTypeFor = null;

@@ -6,7 +6,7 @@ import java.io.IOException;
 import java.io.InputStream;
 
 import http.gyq.com.http.interf.IResponse;
-import http.gyq.com.http.request.HttpRequest;
+import http.gyq.com.http.request.Request;
 
 /**
  * 文件下载功能
@@ -31,7 +31,7 @@ public class DownLoadCallback extends RequestCallbackImpl {
     }
 
     @Override
-    public void requestFinish(HttpRequest request, IResponse response) {
+    public void requestFinish(Request request, IResponse response) {
         InputStream is = null;
         FileOutputStream fos = null;
         try {

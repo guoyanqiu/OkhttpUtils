@@ -4,7 +4,7 @@ import android.support.annotation.Nullable;
 
 import http.gyq.com.http.interf.IRequestCallback;
 import http.gyq.com.http.interf.IResponse;
-import http.gyq.com.http.request.HttpRequest;
+import http.gyq.com.http.request.Request;
 
 /**
  * Created by Arthur on 2017/8/8.
@@ -13,17 +13,17 @@ import http.gyq.com.http.request.HttpRequest;
 public class RequestCallbackImpl implements IRequestCallback {
 
     @Override
-    public void requestFinish(HttpRequest request, IResponse response) {
+    public void requestFinish(Request request, IResponse response) {
 
     }
 
     @Override
-    public void requestError(HttpRequest request, @Nullable Exception e) {
+    public void requestError(Request request, @Nullable Exception e) {
 
     }
 
     @Override
-    public void startRequest(HttpRequest request) {
+    public void startRequest(Request request) {
 
     }
 }

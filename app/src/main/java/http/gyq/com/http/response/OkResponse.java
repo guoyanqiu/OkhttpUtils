@@ -8,7 +8,7 @@ import java.util.List;
 import java.util.Map;
 
 import http.gyq.com.http.interf.IResponse;
-import http.gyq.com.http.request.HttpRequest;
+import http.gyq.com.http.request.Request;
 import okhttp3.Headers;
 import okhttp3.Response;
 import okhttp3.ResponseBody;
@@ -19,13 +19,13 @@ import okhttp3.ResponseBody;
 
 public class OkResponse implements IResponse {
     private Response okResponse;
-    private HttpRequest httpRequest;
-    public OkResponse(Response okResponse, HttpRequest httpRequest) {
+    private Request httpRequest;
+    public OkResponse(Response okResponse, Request httpRequest) {
         this.okResponse = okResponse;
         this.httpRequest = httpRequest;
     }
 
-    public HttpRequest getRequest() {
+    public Request getRequest() {
         return httpRequest;
     }
     @Override
