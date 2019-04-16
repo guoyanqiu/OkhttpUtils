@@ -32,8 +32,11 @@ public class MainActivity extends AppCompatActivity {
                 .setCallback(new RequestCallbackImpl() {
                     @Override
                     public void requestFinish(Request request, IResponse response) {
-                        System.out.print("respose ==" + response.getString());
-
+//                        System.out.print("respose ==" + response.getString());
+                       //转换成对应的JavaBean
+                        /**
+                         * Bean bean =   response.getJavaBean(Bean.class)
+                         */
                     }
                 });
         connectHelper.asyncConnect(request);

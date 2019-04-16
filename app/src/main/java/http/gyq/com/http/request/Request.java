@@ -12,7 +12,7 @@ import java.util.Random;
 
 import http.gyq.com.http.interf.IRequestCallback;
 
-public  class Request {
+public class Request {
     @NonNull
     protected String url;
     //请求头信息
@@ -23,15 +23,22 @@ public  class Request {
     @Nullable
     private IRequestCallback requestCallback;
     private long requestId = 0;
+    private boolean executed=false;
 
-    public Request(String url){
+    public Request(String url) {
         this.url = url;
-        if(isRequestValidity(this)){
+        if (isRequestValidity(this)) {
             throw new IllegalArgumentException("url 拼写错误");
         }
-        requestId = System.currentTimeMillis()+new Random().nextInt(100);
+        requestId = System.currentTimeMillis() + new Random().nextInt(100);
     }
 
+    public void setExecuted(boolean isExecuted){
+        this.executed = isExecuted;
+    }
+    public boolean isExecuted(){
+        return executed;
+    }
     //请求参数
     @Nullable
     private Map<String, String> params;
@@ -47,12 +54,13 @@ public  class Request {
         return params != null && !params.isEmpty();
     }
 
-    public String getUrl(){
-        if(requestType==RequestType.GET){
-            url = buildUrlWithParams(url,params);
+    public String getUrl() {
+        if (requestType == RequestType.GET) {
+            url = buildUrlWithParams(url, params);
         }
         return url;
     }
+
     public static String buildUrlWithParams(String url, Map<String, String> params) {
 
         if (params == null) {
@@ -83,6 +91,7 @@ public  class Request {
     public boolean hasHeaders() {
         return headers != null && !headers.isEmpty();
     }
+
     public RequestType getReqeustType() {
         return requestType;
     }
@@ -126,6 +135,7 @@ public  class Request {
         }
         return true;
     }
+
     protected String parseUrl(@NonNull String url) {
         try {
             URL urlParse = new URL(url);
@@ -137,6 +147,7 @@ public  class Request {
         }
         return url;
     }
+
     public Request addHeader(String name, String value) {
         if (headers == null) {
             headers = new HashMap<>();
@@ -152,6 +163,7 @@ public  class Request {
         params.put(name, value);
         return this;
     }
+
     public Request addHeaders(Map<String, String> headers) {
         if (headers == null || headers.isEmpty()) {
             return this;
