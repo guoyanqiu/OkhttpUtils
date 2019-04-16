@@ -8,7 +8,7 @@ import java.io.InputStream;
  * Created by Arthur on 2017/8/7.
  */
 
-public interface IResponse  {
+public interface IResponse {
     /**
      * 获取服务器返回的header
      * @return
@@ -33,6 +33,8 @@ public interface IResponse  {
      * @return
      */
     @Nullable String getString();
+
+    @Nullable Object getJavaBean(Class beanClass);
 
     /**
      * 获取网络请求返回的输出流，用于下载等功能

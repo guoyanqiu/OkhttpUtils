@@ -2,6 +2,8 @@ package http.gyq.com.http.response;
 
 import android.support.annotation.Nullable;
 
+import com.google.gson.Gson;
+
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.List;
@@ -20,6 +22,7 @@ import okhttp3.ResponseBody;
 public class OkResponse implements IResponse {
     private Response okResponse;
     private Request httpRequest;
+
     public OkResponse(Response okResponse, Request httpRequest) {
         this.okResponse = okResponse;
         this.httpRequest = httpRequest;
@@ -28,6 +31,7 @@ public class OkResponse implements IResponse {
     public Request getRequest() {
         return httpRequest;
     }
+
     @Override
     public Map<String, List<String>> getHeaders() {
         if (okResponse == null) {
@@ -45,22 +49,40 @@ public class OkResponse implements IResponse {
         return okResponse.body();
     }
 
+    /**
+     * 仅仅可以调用一次
+     *
+     * @return
+     */
     @Override
     public String getString() {
         ResponseBody body = getResponseBody();
-        if(body == null) {
+        if (body == null) {
             return "";
         }
         try {
             return body.string();
-        }catch (IOException e) {
+        } catch (IOException e) {
             return "";
         }
     }
 
+    @Nullable
+    @Override
+    public Object getJavaBean(Class beanClass) {
+        Gson gson = new Gson();
+        String string = getString();
+        Object result = null;
+        try {
+            result = gson.fromJson(string, beanClass);
+        } catch (Exception e) {
+        }
+        return result;
+    }
+
     @Override
     public int getCode() {
-        if(okResponse == null){
+        if (okResponse == null) {
             return 0;
         }
         return okResponse.code();
@@ -68,6 +90,7 @@ public class OkResponse implements IResponse {
 
     /**
      * 下载用
+     *
      * @return
      */
     @Nullable
