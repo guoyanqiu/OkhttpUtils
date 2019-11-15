@@ -47,8 +47,13 @@ public class OkhttpConnect implements IHttpConnect {
             @Override
             public void onResponse(Call call, final Response response) throws IOException {
                 OkResponse okHttpResponse = new OkResponse(response, request);
-                if (handler != null && response.isSuccessful()) {
+                if(handler==null){
+                    return;
+                }
+                if (response.isSuccessful()) {
                     handler.requestFinish(request, okHttpResponse);
+                }else{
+                    handler.requestError(request, new Exception("http response not in [200--299] "));
                 }
             }
             @Override
