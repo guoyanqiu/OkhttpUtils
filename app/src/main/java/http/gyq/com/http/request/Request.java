@@ -87,8 +87,8 @@ public  class Request {
         return requestType;
     }
 
-    public long getRequestId() {
-        return requestId;
+    public String getRequestId() {
+        return requestId+"";
     }
 
     public Map<String, String> getHeaders() {

@@ -6,6 +6,7 @@ import android.support.annotation.NonNull;
 import java.io.IOException;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 import http.gyq.com.http.interf.IHttpConnect;
 import http.gyq.com.http.interf.IRequestCallback;
@@ -30,22 +31,30 @@ import okhttp3.Response;
  */
 
 public class OkhttpConnect implements IHttpConnect {
-
+    private ConcurrentHashMap<String, Request> httpMap = new ConcurrentHashMap<>();
     public OkhttpConnect() {
     }
 
     @Override
     public void asyncConnect(@NonNull final Request request) {
+        final String requestId = request.getRequestId();
+        if (httpMap.contains(requestId)) {
+            //取消之前的请求
+            abort(request);
+        }
+        httpMap.put(request.getRequestId(),request);
         final okhttp3.Request.Builder builder = createOkHttpRequestBuilder(request);
         final IRequestCallback handler = request.getCallback();
         if (handler != null) {
             handler.startRequest(request);
         }
+
         Call call = OkhttpClientUtil.getInstance().newCall(builder.build());
 
         call.enqueue(new Callback() {
             @Override
             public void onResponse(Call call, final Response response) throws IOException {
+                httpMap.remove(requestId);
                 OkResponse okHttpResponse = new OkResponse(response, request);
                 if(handler==null){
                     return;
@@ -58,6 +67,7 @@ public class OkhttpConnect implements IHttpConnect {
             }
             @Override
             public void onFailure(Call call, IOException e) {
+                httpMap.remove(requestId);
                 if (call.isCanceled()) {
                     return;
                 }
@@ -70,23 +80,39 @@ public class OkhttpConnect implements IHttpConnect {
 
     @Override
     public IResponse syncConnect(@NonNull Request request) throws IOException {
+        final String requestId = request.getRequestId();
+        if (httpMap.contains(requestId)) {
+            //取消之前的请求
+            abort(request);
+        }
+        httpMap.put(request.getRequestId(),request);
+
         final okhttp3.Request.Builder builder = createOkHttpRequestBuilder(request);
         IRequestCallback handler = request.getCallback();
         if (handler != null) {
             handler.startRequest(request);
         }
         Response response = OkhttpClientUtil.getInstance().newCall(builder.build()).execute();
+        httpMap.remove(requestId);
         return new OkResponse(response, request);
     }
 
     @Override
     public void abort(Request request) {
-        OkhttpClientUtil.getInstance().cancelTag(request.getRequestId());
+        final String requestId = request.getRequestId();
+        httpMap.remove(requestId);
+        OkhttpClientUtil.getInstance().cancelTag(requestId);
     }
 
     @Override
     public void abortAll() {
-        OkhttpClientUtil.getInstance().abortAll();
+        OkhttpClientUtil okHttpUtils = OkhttpClientUtil.getInstance();
+        for(Map.Entry entry:httpMap.entrySet()){
+            Request request = (Request) entry.getKey();
+            String requestId = request.getRequestId();
+            okHttpUtils.cancelTag(requestId);
+        }
+        httpMap.clear();
     }
 
     private okhttp3.Request.Builder createOkHttpRequestBuilder(final Request request) {
