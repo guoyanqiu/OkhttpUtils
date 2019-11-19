@@ -26,9 +26,6 @@ public  class Request {
 
     public Request(String url){
         this.url = url;
-        if(isRequestValidity(this)){
-            throw new IllegalArgumentException("url 拼写错误");
-        }
         requestId = System.currentTimeMillis()+new Random().nextInt(100);
     }
 
